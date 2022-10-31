@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import AddressModal from "./AddressModal";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
@@ -17,8 +17,15 @@ interface AddressForm {
 }
 
 function App() {
+  // ---------------------------------------------------------------------------
+  // state
+  // ---------------------------------------------------------------------------
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { setValue, control } = useForm<AddressForm>({
+
+  // ---------------------------------------------------------------------------
+  // react hook form
+  // ---------------------------------------------------------------------------
+  const { setValue, control, setFocus } = useForm<AddressForm>({
     defaultValues: {
       zoneCode: "",
       address: "",
@@ -41,11 +48,12 @@ function App() {
   };
 
   const addressChangeHandler = (data: DaumAddress) => {
-    console.log(data);
-
+    // console.log(data);
     setValue("zoneCode", data.zonecode);
     setValue("address", data.address);
+    setFocus("addressDetail");
   };
+
   return (
     <form>
       <Grid2 container spacing={2} sx={{ mt: 2 }}>
