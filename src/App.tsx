@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import AddressModal from "./AddressModal";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
@@ -32,6 +32,7 @@ function App() {
       addressDetail: ""
     }
   });
+
   const openButtonClickHandler = () => {
     setIsOpen(true);
   };
@@ -51,7 +52,10 @@ function App() {
     // console.log(data);
     setValue("zoneCode", data.zonecode);
     setValue("address", data.address);
-    setFocus("addressDetail");
+
+    // 위에서 state 가 갱신되면서 포커싱 한 것도 사라짐
+    // 이를 방지하기 위해 타임아웃을 거는 방법 말곤 못찾겠음
+    setTimeout(() => setFocus("addressDetail"), 500);
   };
 
   return (
@@ -102,14 +106,16 @@ function App() {
         <Grid2 container md={12}>
           <Grid2 md={4}>
             <Controller
-              name="addressDetail"
+              name={"addressDetail"}
               control={control}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { name, onChange, value, ref } }) => (
                 <TextField
                   label="상세주소"
                   fullWidth
                   value={value}
+                  name={name}
                   onChange={onChange}
+                  inputRef={ref}
                 />
               )}
             />
